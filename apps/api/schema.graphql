@@ -20,6 +20,28 @@ type Destination {
   summaryAttribution: Attribution
 }
 
+type FlightOffer {
+  id: ID!
+  isSample: Boolean!
+  price: Money!
+  segments: [FlightSegment!]!
+  stops: Int!
+}
+
+type FlightSegment {
+  arrivesAt: String!
+  carrier: String!
+  departsAt: String!
+  flightNumber: String!
+  from: String!
+  to: String!
+}
+
+type Money {
+  amount: String!
+  currency: String!
+}
+
 type Photo {
   alt: String
   attribution: Attribution!
@@ -41,4 +63,5 @@ type Place {
 type Query {
   destination(id: ID!): Destination
   destinations: [Destination!]!
+  flightOffers(date: String!, destination: String!, origin: String!): [FlightOffer!]!
 }
