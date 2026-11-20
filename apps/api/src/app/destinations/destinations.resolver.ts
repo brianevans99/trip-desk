@@ -1,6 +1,7 @@
 import {Args, ID, Parent, Query, ResolveField, Resolver} from '@nestjs/graphql';
 import { Destination } from './destination.model';
 import { WikivoyageService } from '../providers/wikivoyage.service'
+import { Attribution } from "../models/attribution.model";
 
 const SAMPLE: Destination[] = [
   { id: 'lisbon', name: 'Lisbon', country: 'Portugal', summary: 'Hills, trams and pastéis de nata.', photos: [] },
@@ -24,5 +25,10 @@ export class DestinationsResolver {
   @ResolveField(() => String, { nullable: true })
   async summary(@Parent() d: Destination): Promise<string | null> {
     return (await this.wikivoyageService.getSummary(d.name))?.summary ?? d.summary ?? null;
+  }
+
+  @ResolveField(() => Attribution, { nullable: true })
+  async summaryAttribution(@Parent() d: Destination): Promise<Attribution | null> {
+    return (await this.wikivoyageService.getSummary(d.name))?.attribution ?? null;
   }
 }

@@ -9,5 +9,5 @@ export class Destination {
   @Field() country!: string;
   @Field({ nullable: true }) summary?: string;
   @Field(() => [Photo]) photos!: Photo[];
-  @Field(() => Attribution, { nullable: true }) guideAttribution?: Attribution;
+  @Field(() => Attribution, { nullable: true }) summaryAttribution?: Attribution;
 }
