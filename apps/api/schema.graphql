@@ -2,12 +2,29 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Attribution {
+  author: String
+  license: String
+  source: String!
+  url: String
+}
+
 """A place people travel to"""
 type Destination {
   country: String!
+  guideAttribution: Attribution
   id: ID!
   name: String!
+  photos: [Photo!]!
   summary: String
+}
+
+type Photo {
+  alt: String
+  attribution: Attribution!
+  height: Int
+  url: String!
+  width: Int
 }
 
 type Query {
