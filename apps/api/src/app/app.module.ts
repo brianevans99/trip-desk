@@ -8,6 +8,8 @@ import { DestinationsResolver } from './resolvers/destinations.resolver';
 import { WikivoyageService } from './providers/wikivoyage.service';
 import { UnsplashService } from './providers/unsplash.service';
 import { GeoapifyService } from './providers/geoapify.service';
+import { DuffelService } from './providers/duffel.service';
+import { FlightsResolver } from './resolvers/flights.resolver';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { GeoapifyService } from './providers/geoapify.service';
     WikivoyageService,
     UnsplashService,
     GeoapifyService,
+    DuffelService,
+    FlightsResolver
   ],
 })
 export class AppModule {}
