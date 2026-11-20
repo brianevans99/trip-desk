@@ -5,8 +5,9 @@ import { Attribution } from './attribution.model';
 export class Place {
   @Field(() => ID) id!: string;
   @Field() name!: string;
+  @Field({ nullable: true }) address!: string;
   @Field({ nullable: true }) category?: string;
   @Field(() => Float) lat!: number;
-  @Field(() => Float) lon!: number;
+  @Field(() => Float) long!: number;
   @Field(() => Attribution) attribution!: Attribution;
 }

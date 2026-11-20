@@ -1,6 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Attribution } from '../models/attribution.model'
-import { Photo } from '../models/photo.model'
+import { Attribution } from './attribution.model';
+import { Photo } from './photo.model';
+import { Place } from './place.model';
 
 @ObjectType({ description: 'A place people travel to' })
 export class Destination {
@@ -9,5 +10,7 @@ export class Destination {
   @Field() country!: string;
   @Field({ nullable: true }) summary?: string;
   @Field(() => [Photo]) photos!: Photo[];
-  @Field(() => Attribution, { nullable: true }) summaryAttribution?: Attribution;
+  @Field(() => [Place], { nullable: true }) places?: Place[];
+  @Field(() => Attribution, { nullable: true })
+  summaryAttribution?: Attribution;
 }

@@ -4,9 +4,10 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'node:path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { DestinationsResolver } from './destinations/destinations.resolver';
-import { WikivoyageService } from "./providers/wikivoyage.service";
-import { UnsplashService } from "./providers/unsplash.service";
+import { DestinationsResolver } from './resolvers/destinations.resolver';
+import { WikivoyageService } from './providers/wikivoyage.service';
+import { UnsplashService } from './providers/unsplash.service';
+import { GeoapifyService } from './providers/geoapify.service';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { UnsplashService } from "./providers/unsplash.service";
     AppService,
     DestinationsResolver,
     WikivoyageService,
-    UnsplashService
+    UnsplashService,
+    GeoapifyService,
   ],
 })
 export class AppModule {}
