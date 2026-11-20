@@ -10,8 +10,19 @@ export interface GuideSummary {
 export class WikivoyageService {
   private readonly logger = new Logger(WikivoyageService.name);
   private readonly base = 'https://en.wikivoyage.org/api/rest_v1/page/summary/';
+  private readonly cache = new Map<string, { value: GuideSummary | null; expires: number }>();
+  private readonly ttlMs = 24 * 60 * 60 * 1000;
 
   async getSummary(title: string): Promise<GuideSummary | null> {
+    const key = title.toLowerCase();
+    const hit = this.cache.get(key);
+    if (hit && hit.expires > Date.now()) return hit.value;
+    const value = await this.fetchSummary(title);
+    this.cache.set(key, { value, expires: Date.now() + this.ttlMs });
+    return value;
+  }
+
+  private async fetchSummary(title: string): Promise<GuideSummary | null> {
     const url = this.base + encodeURIComponent(title);
     const res = await fetch(url, {
       headers: { 'User-Agent': 'trip-desk portfolio app (brian.evans@bravoechoweb.com)' },
