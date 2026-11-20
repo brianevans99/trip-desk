@@ -49,3 +49,4 @@ vitest.config.*.timestamp*
 .vitest
 
 test-output
+.env
