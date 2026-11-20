@@ -1,0 +1,10 @@
+{
+  "name": "@trip-desk/web-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@trip-desk/web"
+    ]
+  }
+}
