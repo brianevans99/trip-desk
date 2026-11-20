@@ -1,0 +1,25 @@
+{
+  "name": "@trip-desk/api-e2e",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "implicitDependencies": [
+      "@trip-desk/api"
+    ],
+    "targets": {
+      "e2e": {
+        "command": "jest --passWithNoTests",
+        "outputs": [
+          "{projectRoot}/test-output/jest/coverage"
+        ],
+        "dependsOn": [
+          "@trip-desk/api:build",
+          "@trip-desk/api:serve"
+        ],
+        "options": {
+          "cwd": "apps/api-e2e"
+        }
+      }
+    }
+  }
+}
