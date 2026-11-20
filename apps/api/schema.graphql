@@ -1,0 +1,16 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""A place people travel to"""
+type Destination {
+  country: String!
+  id: ID!
+  name: String!
+  summary: String
+}
+
+type Query {
+  destination(id: ID!): Destination
+  destinations: [Destination!]!
+}
