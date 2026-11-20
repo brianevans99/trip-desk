@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DestinationsResolver } from './destinations/destinations.resolver';
+import {WikivoyageService} from "./providers/wikivoyage.service";
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import { DestinationsResolver } from './destinations/destinations.resolver';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, DestinationsResolver],
+  providers: [AppService, DestinationsResolver,WikivoyageService],
 })
 export class AppModule {}
