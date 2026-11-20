@@ -15,6 +15,7 @@ type Destination {
   id: ID!
   name: String!
   photos: [Photo!]!
+  places: [Place!]
   summary: String
   summaryAttribution: Attribution
 }
@@ -25,6 +26,16 @@ type Photo {
   height: Int
   url: String!
   width: Int
+}
+
+type Place {
+  address: String
+  attribution: Attribution!
+  category: String
+  id: ID!
+  lat: Float!
+  long: Float!
+  name: String!
 }
 
 type Query {

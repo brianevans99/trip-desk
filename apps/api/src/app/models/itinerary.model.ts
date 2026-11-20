@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Destination } from '../destinations/destination.model';
+import { Destination } from './destination.model';
 import { Hotel } from './hotel.model';
 import { Place } from './place.model';
 import { FlightOffer } from './flight-offer.model';
