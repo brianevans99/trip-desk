@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client/react';
 import { Link, useParams } from 'react-router-dom';
 import { graphql } from '../gql';
+import { FlightSearch } from './flight-search'
 
 const DESTINATION = graphql(`
   query Destination($id: ID!) {
@@ -54,6 +55,7 @@ export function DestinationDetail() {
         ))}
       </ul>
       <p className="mt-2 text-xs text-gray-500">Places data © OpenStreetMap contributors, via Geoapify</p>
+      <FlightSearch />
     </article>
   );
 }
