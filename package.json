@@ -8,6 +8,7 @@
     "node": ">=24"
   },
   "dependencies": {
+    "@apollo/client": "^4.3.8",
     "@apollo/server": "^5.5.2",
     "@as-integrations/express5": "^1.1.2",
     "@nestjs/apollo": "^13.4.5",
