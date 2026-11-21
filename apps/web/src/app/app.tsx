@@ -1,51 +1,28 @@
-// Uncomment this line to use CSS modules
-// import styles from './app.module.css';
-import NxWelcome from './nx-welcome';
+import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 
-import { Route, Routes, Link } from 'react-router-dom';
+const DESTINATIONS = gql`
+  query Destinations {
+    destinations { id name country summary }
+  }
+`;
 
 export function App() {
+  const { data, loading, error } = useQuery<any>(DESTINATIONS);
+  if (loading) return <p>Loading…</p>;
+  if (error) return <p>Error: {error.message}</p>;
   return (
-    <div>
-      <NxWelcome title="@trip-desk/web" />
-
-      {/* START: routes */}
-      {/* These routes and navigation have been generated for you */}
-      {/* Feel free to move and update them to fit your needs */}
-      <br />
-      <hr />
-      <br />
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
+    <main>
+      <h1>Trip Desk</h1>
+      <ul>
+        {data.destinations.map((d: any) => (
+          <li key={d.id}>
+            <h2>{d.name}, {d.country}</h2>
+            <p>{d.summary}</p>
           </li>
-          <li>
-            <Link to="/page-2">Page 2</Link>
-          </li>
-        </ul>
-      </nav>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <div>
-              This is the generated root route.{' '}
-              <Link to="/page-2">Click here for page 2.</Link>
-            </div>
-          }
-        />
-        <Route
-          path="/page-2"
-          element={
-            <div>
-              <Link to="/">Click here to go back to root page.</Link>
-            </div>
-          }
-        />
-      </Routes>
-      {/* END: routes */}
-    </div>
+        ))}
+      </ul>
+    </main>
   );
 }
 
