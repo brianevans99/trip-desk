@@ -1,102 +1,69 @@
-# TripDesk
+# Trip Desk
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+A travel-planning app built to show a modern React + GraphQL stack end to end: one GraphQL API that pulls together destination guides, photos, nearby sights and flight offers from four outside providers.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+> Status: work in progress. Flight data comes from Duffel's **test mode**, so the airlines and prices are samples.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/react-monorepo-tutorial?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## Stack
 
-## Run tasks
+- **Monorepo:** Nx, npm, Node 24
+- **Web:** React, Vite, TypeScript, Tailwind CSS v4, React Router, Apollo Client
+- **API:** NestJS, code-first GraphQL (Apollo Server 5)
+- **Types:** GraphQL Code Generator (client preset), so queries are typed from the schema
 
-To run the dev server for your app, use:
+## How it works
 
-```sh
-npx nx serve web
+The API uses one adapter service per provider. Each adapter calls its provider, maps the response into the app's own GraphQL types (`Destination`, `Photo`, `Place`, `FlightOffer`) and caches the result in memory. The UI only ever sees our schema, never a provider's raw format.
+
+| Provider | Used for | Cache |
+| --- | --- | --- |
+| [Wikivoyage](https://en.wikivoyage.org/) | Destination summaries | 24 hours |
+| [Unsplash](https://unsplash.com/developers) | Destination photos | 24 hours |
+| [Geoapify](https://www.geoapify.com/) | Nearby sights (OpenStreetMap data) | 24 hours |
+| [Duffel](https://duffel.com/) | Flight offers (test mode) | 10 minutes |
+
+## Getting started
+
+```bash
+nvm use            # Node 24, from .nvmrc
+npm install
+cp .env.example .env   # then add your own keys
 ```
 
-To create a production bundle:
+| Variable | Where to get it |
+| --- | --- |
+| `UNSPLASH_ACCESS_KEY` | Unsplash developer app (free demo tier) |
+| `GEOAPIFY_API_KEY` | Geoapify free plan |
+| `DUFFEL_ACCESS_TOKEN` | Duffel test-mode token |
 
-```sh
-npx nx build web
+Wikivoyage needs no key.
+
+Run the API and the web app in two terminals:
+
+```bash
+npx nx serve @trip-desk/api   # http://localhost:3000, GraphiQL at /graphql
+npx nx serve @trip-desk/web   # http://localhost:4200
 ```
 
-To see all available targets to run for a project, run:
+After changing a query, regenerate the types:
 
-```sh
-npx nx show project web
+```bash
+npm run codegen
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+## Roadmap
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- Flight search on the destination page
+- Saved itineraries in Postgres, with DataLoader
+- Sign-in with GitHub using OAuth 2.0 Authorization Code + PKCE
+- Docker Compose, CI on Bitbucket Pipelines, Playwright + axe accessibility tests
 
-## Add new projects
+## Attribution
 
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
+- Destination summaries from Wikivoyage, licensed [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+- Photos from Unsplash, credited to each photographer under the [Unsplash License](https://unsplash.com/license)
+- Places data © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright) (ODbL), via Geoapify
 
-Use the plugin's generator to create new projects.
+## License
 
-To generate a new application, use:
-
-```sh
-npx nx g @nx/react:app demo
-```
-
-To generate a new library, use:
-
-```sh
-npx nx g @nx/react:lib mylib
-```
-
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
-
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Set up CI!
-
-### Step 1
-
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
-```
-
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/react-monorepo-tutorial?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+MIT, see [LICENSE](LICENSE).
