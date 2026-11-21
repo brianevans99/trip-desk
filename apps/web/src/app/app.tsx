@@ -1,27 +1,27 @@
 import { useQuery } from '@apollo/client/react';
 import { graphql } from '../gql'
+import { DestinationCard } from './destination-card';
 
 const DESTINATIONS = graphql(`
   query Destinations {
-    destinations { id name country summary }
+    destinations {
+      id name country summary
+      summaryAttribution { source url license }
+      photos { url alt attribution { author url } }
+    }
   }
-`);
 
+`);
 export function App() {
   const { data, loading, error } = useQuery(DESTINATIONS);
   if (loading) return <p>Loading…</p>;
   if (error) return <p>Error: {error.message}</p>;
   return (
-    <main>
-      <h1>Trip Desk</h1>
-      <ul>
-        {data?.destinations.map((d) => (
-          <li key={d.id}>
-            <h2>{d.name}, {d.country}</h2>
-            <p>{d.summary}</p>
-          </li>
-        ))}
-      </ul>
+    <main className="mx-auto max-w-6xl p-6">
+      <h1 className="text-3xl font-bold text-brand-700">Trip Desk</h1>
+      <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {data?.destinations.map((d) => <DestinationCard key={d.id} d={d} />)}
+      </div>
     </main>
   );
 

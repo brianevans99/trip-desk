@@ -14,10 +14,10 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "\n  query Destinations {\n    destinations { id name country summary }\n  }\n": typeof types.DestinationsDocument,
+    "\n  query Destinations {\n    destinations {\n      id name country summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n    }\n  }\n\n": typeof types.DestinationsDocument,
 };
 const documents: Documents = {
-    "\n  query Destinations {\n    destinations { id name country summary }\n  }\n": types.DestinationsDocument,
+    "\n  query Destinations {\n    destinations {\n      id name country summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n    }\n  }\n\n": types.DestinationsDocument,
 };
 
 /**
@@ -37,7 +37,7 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query Destinations {\n    destinations { id name country summary }\n  }\n"): (typeof documents)["\n  query Destinations {\n    destinations { id name country summary }\n  }\n"];
+export function graphql(source: "\n  query Destinations {\n    destinations {\n      id name country summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n    }\n  }\n\n"): (typeof documents)["\n  query Destinations {\n    destinations {\n      id name country summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n    }\n  }\n\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
