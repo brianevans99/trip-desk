@@ -14,7 +14,7 @@ import { Photo } from '../models/photo.model';
 import { GeoapifyService } from '../providers/geoapify.service';
 import { Place } from '../models/place.model';
 
-const SAMPLE: Destination[] = [
+const SAMPLE_DESTINATIONS: Destination[] = [
   { id: 'lisbon', name: 'Lisbon', country: 'Portugal', summary: 'Hills, trams and pastéis de nata.', photos: [] },
   { id: 'kyoto', name: 'Kyoto', country: 'Japan', summary: 'Temples, gardens and old streets.', photos: [] },
   {
@@ -35,14 +35,12 @@ export class DestinationsResolver {
   ) {}
   @Query(() => [Destination])
   destinations(): Destination[] {
-    return SAMPLE;
+    return SAMPLE_DESTINATIONS;
   }
 
   @Query(() => Destination, { nullable: true })
-  destination(
-    @Args('id', { type: () => ID }) id: string,
-  ): Destination | undefined {
-    return SAMPLE.find((d) => d.id === id);
+  destination(@Args('id', { type: () => ID }) id: string): Destination | null {
+    return SAMPLE_DESTINATIONS.find((d) => d.id === id) ?? null;
   }
 
   @ResolveField(() => String, { nullable: true })
