@@ -14,10 +14,12 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "\n  query Destinations {\n    destinations {\n      id name country summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n    }\n  }\n\n": typeof types.DestinationsDocument,
+    "\n  query Destination($id: ID!) {\n    destination(id: $id) {\n      id name country summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n      places { id name category address }\n    }\n  }\n": typeof types.DestinationDocument,
+    "\n  query Destinations {\n    destinations {\n      id name country summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n    }\n  }\n": typeof types.DestinationsDocument,
 };
 const documents: Documents = {
-    "\n  query Destinations {\n    destinations {\n      id name country summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n    }\n  }\n\n": types.DestinationsDocument,
+    "\n  query Destination($id: ID!) {\n    destination(id: $id) {\n      id name country summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n      places { id name category address }\n    }\n  }\n": types.DestinationDocument,
+    "\n  query Destinations {\n    destinations {\n      id name country summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n    }\n  }\n": types.DestinationsDocument,
 };
 
 /**
@@ -37,7 +39,11 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query Destinations {\n    destinations {\n      id name country summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n    }\n  }\n\n"): (typeof documents)["\n  query Destinations {\n    destinations {\n      id name country summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n    }\n  }\n\n"];
+export function graphql(source: "\n  query Destination($id: ID!) {\n    destination(id: $id) {\n      id name country summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n      places { id name category address }\n    }\n  }\n"): (typeof documents)["\n  query Destination($id: ID!) {\n    destination(id: $id) {\n      id name country summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n      places { id name category address }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query Destinations {\n    destinations {\n      id name country summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n    }\n  }\n"): (typeof documents)["\n  query Destinations {\n    destinations {\n      id name country summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
