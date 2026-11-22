@@ -12,7 +12,9 @@ const FLIGHT_OFFERS = graphql(`
   }
 `);
 
-export function FlightSearch({ defaultDestination = '' }: { defaultDestination?: string }) {
+type Props = { defaultDestination?: string };
+
+export function FlightSearch({ defaultDestination = '' }: Props) {
   const [origin, setOrigin] = useState('ATL');
   const [destination, setDestination] = useState(defaultDestination);
   const [date, setDate] = useState('');

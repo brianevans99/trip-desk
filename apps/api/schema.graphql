@@ -11,6 +11,7 @@ type Attribution {
 
 """A place people travel to"""
 type Destination {
+  airportCode: String
   country: String!
   id: ID!
   name: String!

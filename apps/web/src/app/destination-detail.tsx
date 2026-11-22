@@ -6,7 +6,7 @@ import { FlightSearch } from './flight-search'
 const DESTINATION = graphql(`
   query Destination($id: ID!) {
     destination(id: $id) {
-      id name country summary
+      id name country airportCode summary
       summaryAttribution { source url license }
       photos { url alt attribution { author url } }
       places { id name category address }
@@ -55,7 +55,7 @@ export function DestinationDetail() {
         ))}
       </ul>
       <p className="mt-2 text-xs text-gray-500">Places data © OpenStreetMap contributors, via Geoapify</p>
-      <FlightSearch />
+      <FlightSearch defaultDestination={d.airportCode ?? ''} />
     </article>
   );
 }
