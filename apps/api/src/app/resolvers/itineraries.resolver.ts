@@ -1,7 +1,8 @@
-import { Args, Mutation, Query, ResolveField, Parent, Resolver } from '@nestjs/graphql';
+import {Args, Mutation, Query, ResolveField, Parent, Resolver, Context} from '@nestjs/graphql';
 import { PrismaService } from '../prisma/prisma.service';
 import { Itinerary, ItineraryItem } from '../models/itinerary.model';
 import { AddItemInput, CreateItineraryInput } from '../inputs/itinerary.inputs';
+import type { Loaders } from "../loaders/loaders";
 
 // Temporary until OAuth: everything belongs to one demo user.
 const DEMO_USER = 'demo-user';
@@ -35,11 +36,7 @@ export class ItinerariesResolver {
 
   // Runs once per itinerary: this is the N+1 we'll fix with DataLoader.
   @ResolveField(() => [ItineraryItem])
-  items(@Parent() itinerary: Itinerary) {
-    console.log(`[query] items for ${itinerary.id}`);
-    return this.prisma.itineraryItem.findMany({
-      where: { itineraryId: itinerary.id },
-      orderBy: { position: 'asc' },
-    });
+  items(@Parent() itinerary: Itinerary, @Context('loaders') loaders: Loaders) {
+    return loaders.itemsByItinerary.load(itinerary.id);
   }
 }

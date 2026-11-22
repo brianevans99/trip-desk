@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { join } from 'node:path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DestinationsResolver } from './resolvers/destinations.resolver';
@@ -12,15 +11,21 @@ import { DuffelService } from './providers/duffel.service';
 import { FlightsResolver } from './resolvers/flights.resolver';
 import { PrismaModule } from './prisma/prisma.module'
 import { ItinerariesResolver } from './resolvers/itineraries.resolver'
+import { PrismaService } from "./prisma/prisma.service";
+import {createLoaders} from "./loaders/loaders";
 
 
 @Module({
   imports: [
-    GraphQLModule.forRoot<ApolloDriverConfig>({
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
-      autoSchemaFile: join(process.cwd(), 'apps/api/schema.graphql'),
-      sortSchema: true,
-      graphiql: true,
+      inject: [PrismaService],
+      useFactory: (prismaService: PrismaService) => ({
+        autoSchemaFile: true,
+        sortSchema: true,
+        graphiql: true,
+        context: () => ({ loaders: createLoaders(prismaService) })
+      })
     }),
     PrismaModule
   ],

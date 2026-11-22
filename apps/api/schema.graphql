@@ -2,28 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-input AddItemInput {
-  destinationId: String!
-  itineraryId: ID!
-  note: String
-  placeId: String
-}
-
 type Attribution {
   author: String
   license: String
   source: String!
   url: String
 }
-
-input CreateItineraryInput {
-  name: String!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 """A place people travel to"""
 type Destination {
@@ -54,29 +38,9 @@ type FlightSegment {
   to: String!
 }
 
-type Itinerary {
-  createdAt: DateTime!
-  id: ID!
-  items: [ItineraryItem!]!
-  name: String!
-}
-
-type ItineraryItem {
-  destinationId: String!
-  id: ID!
-  note: String
-  placeId: String
-  position: Int!
-}
-
 type Money {
   amount: String!
   currency: String!
-}
-
-type Mutation {
-  addItineraryItem(input: AddItemInput!): ItineraryItem!
-  createItinerary(input: CreateItineraryInput!): Itinerary!
 }
 
 type Photo {
@@ -101,5 +65,4 @@ type Query {
   destination(id: ID!): Destination
   destinations: [Destination!]!
   flightOffers(date: String!, destination: String!, origin: String!): [FlightOffer!]!
-  itineraries: [Itinerary!]!
 }
