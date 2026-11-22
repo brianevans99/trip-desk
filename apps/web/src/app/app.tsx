@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { DestinationList } from './destination-list';
 import { DestinationDetail } from './destination-detail';
+import { ItinerariesPage } from "./itineraries-page";
 
 export function App() {
   return (
@@ -9,6 +10,7 @@ export function App() {
       <Routes>
         <Route path="/" element={<DestinationList />} />
         <Route path="/destinations/:id" element={<DestinationDetail />} />
+        <Route path="/itineraries" element={<ItinerariesPage />} />
       </Routes>
     </main>
   );
