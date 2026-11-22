@@ -11,6 +11,8 @@ import { GeoapifyService } from './providers/geoapify.service';
 import { DuffelService } from './providers/duffel.service';
 import { FlightsResolver } from './resolvers/flights.resolver';
 import { PrismaModule } from './prisma/prisma.module'
+import { ItinerariesResolver } from './resolvers/itineraries.resolver'
+
 
 @Module({
   imports: [
@@ -30,7 +32,8 @@ import { PrismaModule } from './prisma/prisma.module'
     UnsplashService,
     GeoapifyService,
     DuffelService,
-    FlightsResolver
+    FlightsResolver,
+    ItinerariesResolver
   ],
 })
 export class AppModule {}
