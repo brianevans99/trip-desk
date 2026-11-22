@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client/react';
 import { Link, useParams } from 'react-router-dom';
 import { graphql } from '../gql';
 import { FlightSearch } from './flight-search'
+import { SaveToItinerary } from "./save-to-itinerary";
 
 const DESTINATION = graphql(`
   query Destination($id: ID!) {
@@ -39,6 +40,7 @@ export function DestinationDetail() {
       </div>
 
       <p className="mt-6 max-w-prose text-gray-700">{d.summary}</p>
+      <SaveToItinerary destinationId={d.id} destinationName={d.name} />
       {d.summaryAttribution && (
         <p className="mt-2 text-xs text-gray-500">
           From <a href={d.summaryAttribution.url ?? undefined} className="underline" target="_blank" rel="noreferrer">{d.summaryAttribution.source}</a>, {d.summaryAttribution.license}

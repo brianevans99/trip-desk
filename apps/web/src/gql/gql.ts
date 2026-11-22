@@ -19,6 +19,8 @@ type Documents = {
     "\n  query FlightOffers($origin: String!, $destination: String!, $date: String!) {\n    flightOffers(origin: $origin, destination: $destination, date: $date) {\n      id stops isSample\n      price { amount currency }\n      segments { from to departsAt arrivesAt carrier flightNumber }\n    }\n  }\n": typeof types.FlightOffersDocument,
     "\n  query Itineraries {\n    itineraries {\n      id\n      name\n      createdAt\n      items { id destinationId note position }\n    }\n  }\n": typeof types.ItinerariesDocument,
     "\n  mutation CreateItinerary($input: CreateItineraryInput!) {\n    createItinerary(input: $input) { id name }\n  }\n": typeof types.CreateItineraryDocument,
+    "\n  query ItineraryOptions {\n    itineraries { id name }\n  }\n": typeof types.ItineraryOptionsDocument,
+    "\n  mutation AddItineraryItem($input: AddItemInput!) {\n    addItineraryItem(input: $input) { id position }\n  }\n": typeof types.AddItineraryItemDocument,
 };
 const documents: Documents = {
     "\n  query Destination($id: ID!) {\n    destination(id: $id) {\n      id name country airportCode summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n      places { id name category address }\n    }\n  }\n": types.DestinationDocument,
@@ -26,6 +28,8 @@ const documents: Documents = {
     "\n  query FlightOffers($origin: String!, $destination: String!, $date: String!) {\n    flightOffers(origin: $origin, destination: $destination, date: $date) {\n      id stops isSample\n      price { amount currency }\n      segments { from to departsAt arrivesAt carrier flightNumber }\n    }\n  }\n": types.FlightOffersDocument,
     "\n  query Itineraries {\n    itineraries {\n      id\n      name\n      createdAt\n      items { id destinationId note position }\n    }\n  }\n": types.ItinerariesDocument,
     "\n  mutation CreateItinerary($input: CreateItineraryInput!) {\n    createItinerary(input: $input) { id name }\n  }\n": types.CreateItineraryDocument,
+    "\n  query ItineraryOptions {\n    itineraries { id name }\n  }\n": types.ItineraryOptionsDocument,
+    "\n  mutation AddItineraryItem($input: AddItemInput!) {\n    addItineraryItem(input: $input) { id position }\n  }\n": types.AddItineraryItemDocument,
 };
 
 /**
@@ -62,6 +66,14 @@ export function graphql(source: "\n  query Itineraries {\n    itineraries {\n   
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation CreateItinerary($input: CreateItineraryInput!) {\n    createItinerary(input: $input) { id name }\n  }\n"): (typeof documents)["\n  mutation CreateItinerary($input: CreateItineraryInput!) {\n    createItinerary(input: $input) { id name }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query ItineraryOptions {\n    itineraries { id name }\n  }\n"): (typeof documents)["\n  query ItineraryOptions {\n    itineraries { id name }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation AddItineraryItem($input: AddItemInput!) {\n    addItineraryItem(input: $input) { id position }\n  }\n"): (typeof documents)["\n  mutation AddItineraryItem($input: AddItemInput!) {\n    addItineraryItem(input: $input) { id position }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
