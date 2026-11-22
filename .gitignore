@@ -50,3 +50,6 @@ vitest.config.*.timestamp*
 
 test-output
 .env
+
+/generated/prisma
+apps/api/src/generated

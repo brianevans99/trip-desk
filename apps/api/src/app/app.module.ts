@@ -10,6 +10,7 @@ import { UnsplashService } from './providers/unsplash.service';
 import { GeoapifyService } from './providers/geoapify.service';
 import { DuffelService } from './providers/duffel.service';
 import { FlightsResolver } from './resolvers/flights.resolver';
+import { PrismaModule } from './prisma/prisma.module'
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { FlightsResolver } from './resolvers/flights.resolver';
       sortSchema: true,
       graphiql: true,
     }),
+    PrismaModule
   ],
   controllers: [AppController],
   providers: [
