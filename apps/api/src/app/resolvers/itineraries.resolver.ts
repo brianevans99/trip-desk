@@ -1,4 +1,4 @@
-import {Args, Mutation, Query, ResolveField, Parent, Resolver, Context} from '@nestjs/graphql';
+import {Args, Mutation, Query, ResolveField, Parent, Resolver, Context, ID} from '@nestjs/graphql';
 import { PrismaService } from '../prisma/prisma.service';
 import { Itinerary, ItineraryItem } from '../models/itinerary.model';
 import { AddItemInput, CreateItineraryInput } from '../inputs/itinerary.inputs';
@@ -38,5 +38,21 @@ export class ItinerariesResolver {
   @ResolveField(() => [ItineraryItem])
   items(@Parent() itinerary: Itinerary, @Context('loaders') loaders: Loaders) {
     return loaders.itemsByItinerary.load(itinerary.id);
+  }
+
+  @Mutation(() => Boolean)
+  async removeItineraryItem(@Args('id', { type: () => ID }) id: string) {
+    const item = await this.prisma.itineraryItem.findUnique({ where: { id } });
+    if (!item) return false;
+
+    await this.prisma.$transaction([
+      this.prisma.itineraryItem.delete({ where: { id } }),
+      // Close the gap so positions stay 0, 1, 2…
+      this.prisma.itineraryItem.updateMany({
+        where: { itineraryId: item.itineraryId, position: { gt: item.position } },
+        data: { position: { decrement: 1 } },
+      }),
+    ]);
+    return true;
   }
 }

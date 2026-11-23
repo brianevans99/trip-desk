@@ -62,6 +62,7 @@ type Itinerary {
 }
 
 type ItineraryItem {
+  destination: Destination
   destinationId: String!
   id: ID!
   note: String
@@ -77,6 +78,7 @@ type Money {
 type Mutation {
   addItineraryItem(input: AddItemInput!): ItineraryItem!
   createItinerary(input: CreateItineraryInput!): Itinerary!
+  removeItineraryItem(id: ID!): Boolean!
 }
 
 type Photo {
