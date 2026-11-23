@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useApolloClient } from '@apollo/client/react';
 
 export function AuthCallback() {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
   const ran = useRef(false); // React StrictMode runs effects twice; a code works only once
+  const client = useApolloClient();
 
   useEffect(() => {
     if (ran.current) return;
@@ -30,9 +32,12 @@ export function AuthCallback() {
       body: JSON.stringify({ code, codeVerifier: verifier }),
     })
       .then((res) => (res.ok ? res.json() : Promise.reject(res)))
-      .then(() => navigate('/itineraries', { replace: true }))
+      .then(async () => {
+        await client.resetStore(); // drop the cached signed-out data and refetch as you
+        navigate('/itineraries', { replace: true });
+      })
       .catch(() => setError('GitHub sign-in failed. Please try again.'));
-  }, [navigate]);
+  }, [navigate, client]);
 
   return <p role="status" className="p-6">{error ?? 'Signing you in…'}</p>;
 }

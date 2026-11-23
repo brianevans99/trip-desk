@@ -47,6 +47,16 @@ export function ItinerariesPage() {
     refetchQueries: ['Itineraries'],
   });
 
+  if (loading) return <p className="p-6">Loading…</p>;
+  if (error) {
+    return (
+      <section className="mx-auto max-w-3xl p-6">
+        <h1 className="text-3xl font-bold">My itineraries</h1>
+        <p className="mt-4">Sign in to see your itineraries.</p>
+      </section>
+    );
+  }
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!name.trim()) return;
@@ -72,14 +82,11 @@ export function ItinerariesPage() {
         </button>
       </form>
 
-      {loading && <p>Loading…</p>}
-      {error && <p role="alert">Couldn't load itineraries.</p>}
-
       <ul className="space-y-4">
         {data?.itineraries.map((it) => (
           <li key={it.id} className="rounded border p-4">
             <h2 className="text-xl font-semibold">{it.name}</h2>
-            <p className="text-sm text-gray-500">
+            <div className="text-sm text-gray-500">
               {it.items.length === 0 ? (
                 <p className="text-sm text-gray-500">No destinations yet.</p>
               ) : (
@@ -108,7 +115,7 @@ export function ItinerariesPage() {
                   ))}
                 </ul>
               )}
-            </p>
+            </div>
           </li>
         ))}
       </ul>

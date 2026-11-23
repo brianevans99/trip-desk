@@ -3,13 +3,13 @@ import { DestinationList } from './destination-list';
 import { DestinationDetail } from './destination-detail';
 import { ItinerariesPage } from "./itineraries-page";
 import { AuthCallback } from "./auth/auth-callback";
-import { startGitHubSignIn } from "./auth/pkce";
+import {UserMenu} from "./auth/user-menu";
 
 export function App() {
   return (
     <main className="mx-auto max-w-6xl p-6">
       <h1 className="text-3xl font-bold text-brand-700">Trip Desk</h1>
-      <button onClick={startGitHubSignIn}>Sign in with GitHub</button>
+      <UserMenu />
       <Routes>
         <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/" element={<DestinationList />} />
