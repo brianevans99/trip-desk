@@ -13,19 +13,7 @@ import { UnsplashService } from '../providers/unsplash.service';
 import { Photo } from '../models/photo.model';
 import { GeoapifyService } from '../providers/geoapify.service';
 import { Place } from '../models/place.model';
-
-const SAMPLE_DESTINATIONS: Destination[] = [
-  { id: 'lisbon', name: 'Lisbon', country: 'Portugal', summary: 'Hills, trams and pastéis de nata.', photos: [], airportCode: 'LIS' },
-  { id: 'kyoto', name: 'Kyoto', country: 'Japan', summary: 'Temples, gardens and old streets.', photos: [], airportCode: 'KIX' },
-  {
-    id: 'toronto',
-    name: 'Toronto',
-    country: 'Canada',
-    summary: 'Canadian history.',
-    photos: [],
-    airportCode: 'YYZ',
-  },
-];
+import { DESTINATIONS } from '../data/destinations';
 
 @Resolver(() => Destination)
 export class DestinationsResolver {
@@ -36,12 +24,12 @@ export class DestinationsResolver {
   ) {}
   @Query(() => [Destination])
   destinations(): Destination[] {
-    return SAMPLE_DESTINATIONS;
+    return DESTINATIONS;
   }
 
   @Query(() => Destination, { nullable: true })
   destination(@Args('id', { type: () => ID }) id: string): Destination | null {
-    return SAMPLE_DESTINATIONS.find((d) => d.id === id) ?? null;
+    return DESTINATIONS.find((d) => d.id === id) ?? null;
   }
 
   @ResolveField(() => String, { nullable: true })

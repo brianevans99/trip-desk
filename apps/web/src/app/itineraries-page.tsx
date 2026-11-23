@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client/react';
 import { graphql } from '../gql';
+import { Link } from 'react-router-dom';
 
 const ITINERARIES = graphql(`
   query Itineraries {
@@ -8,7 +9,20 @@ const ITINERARIES = graphql(`
       id
       name
       createdAt
-      items { id destinationId note position }
+      items {
+        id
+        position
+        note
+        destination {
+          id
+          name
+          country
+          photos {
+            url
+            alt
+          }
+        }
+      }
     }
   }
 `);
@@ -19,8 +33,15 @@ const CREATE_ITINERARY = graphql(`
   }
 `);
 
+const REMOVE_ITEM = graphql(`
+  mutation RemoveItineraryItem($id: ID!) {
+    removeItineraryItem(id: $id)
+  }
+`);
+
 export function ItinerariesPage() {
   const [name, setName] = useState('');
+  const [removeItem] = useMutation(REMOVE_ITEM, { refetchQueries: ['Itineraries'] });
   const { data, loading, error } = useQuery(ITINERARIES);
   const [createItinerary, { loading: saving }] = useMutation(CREATE_ITINERARY, {
     refetchQueries: ['Itineraries'],
@@ -59,7 +80,34 @@ export function ItinerariesPage() {
           <li key={it.id} className="rounded border p-4">
             <h2 className="text-xl font-semibold">{it.name}</h2>
             <p className="text-sm text-gray-500">
-              {it.items.length} {it.items.length === 1 ? 'item' : 'items'}
+              {it.items.length === 0 ? (
+                <p className="text-sm text-gray-500">No destinations yet.</p>
+              ) : (
+                <ul className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                  {it.items.map((item) => (
+                    <li key={item.id}>
+                      {item.destination?.photos[0] && (
+                        <img
+                          src={item.destination.photos[0].url}
+                          alt={item.destination.photos[0].alt ?? ''}
+                          className="h-24 w-full rounded object-cover"
+                        />
+                      )}
+                      <Link to={`/destinations/${item.destination?.id}`} className="mt-1 block font-medium underline">
+                        {item.destination?.name ?? 'Unknown destination'}
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => removeItem({ variables: { id: item.id } })}
+                        aria-label={`Remove ${item.destination?.name ?? 'destination'} from ${it.name}`}
+                        className="mt-1 text-sm text-red-700 underline"
+                      >
+                        Remove
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </p>
           </li>
         ))}

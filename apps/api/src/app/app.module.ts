@@ -14,6 +14,7 @@ import { PrismaModule } from './prisma/prisma.module'
 import { ItinerariesResolver } from './resolvers/itineraries.resolver'
 import { PrismaService } from "./prisma/prisma.service";
 import { createLoaders } from "./loaders/loaders";
+import { ItineraryItemResolver } from './resolvers/itinerary-item.resolver';
 
 
 @Module({
@@ -39,7 +40,8 @@ import { createLoaders } from "./loaders/loaders";
     GeoapifyService,
     DuffelService,
     FlightsResolver,
-    ItinerariesResolver
+    ItinerariesResolver,
+    ItineraryItemResolver
   ],
 })
 export class AppModule {}
