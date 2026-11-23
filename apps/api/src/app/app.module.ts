@@ -18,6 +18,7 @@ import { createLoaders } from "./loaders/loaders";
 import { ItineraryItemResolver } from './resolvers/itinerary-item.resolver';
 import { AuthController } from './auth/auth.controller'
 import { AuthService } from './auth/auth.service'
+import { MeResolver } from './resolvers/me.resolver'
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { AuthService } from './auth/auth.service'
   providers: [
     AppService,
     AuthService,
+    MeResolver,
     DestinationsResolver,
     WikivoyageService,
     UnsplashService,

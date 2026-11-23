@@ -14,6 +14,7 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
+    "\n  query Me { me { id login avatarUrl } }\n": typeof types.MeDocument,
     "\n  query Destination($id: ID!) {\n    destination(id: $id) {\n      id name country airportCode summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n      places { id name category address }\n    }\n  }\n": typeof types.DestinationDocument,
     "\n  query Destinations {\n    destinations {\n      id name country summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n    }\n  }\n": typeof types.DestinationsDocument,
     "\n  query FlightOffers($origin: String!, $destination: String!, $date: String!) {\n    flightOffers(origin: $origin, destination: $destination, date: $date) {\n      id stops isSample\n      price { amount currency }\n      segments { from to departsAt arrivesAt carrier flightNumber }\n    }\n  }\n": typeof types.FlightOffersDocument,
@@ -24,6 +25,7 @@ type Documents = {
     "\n  mutation AddItineraryItem($input: AddItemInput!) {\n    addItineraryItem(input: $input) { id position }\n  }\n": typeof types.AddItineraryItemDocument,
 };
 const documents: Documents = {
+    "\n  query Me { me { id login avatarUrl } }\n": types.MeDocument,
     "\n  query Destination($id: ID!) {\n    destination(id: $id) {\n      id name country airportCode summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n      places { id name category address }\n    }\n  }\n": types.DestinationDocument,
     "\n  query Destinations {\n    destinations {\n      id name country summary\n      summaryAttribution { source url license }\n      photos { url alt attribution { author url } }\n    }\n  }\n": types.DestinationsDocument,
     "\n  query FlightOffers($origin: String!, $destination: String!, $date: String!) {\n    flightOffers(origin: $origin, destination: $destination, date: $date) {\n      id stops isSample\n      price { amount currency }\n      segments { from to departsAt arrivesAt carrier flightNumber }\n    }\n  }\n": types.FlightOffersDocument,
@@ -48,6 +50,10 @@ const documents: Documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query Me { me { id login avatarUrl } }\n"): (typeof documents)["\n  query Me { me { id login avatarUrl } }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
