@@ -12,6 +12,7 @@ model Itinerary {
   id        String          @id @default(cuid())
   name      String
   ownerId   String
+  owner     User            @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
   items     ItineraryItem[]
@@ -30,4 +31,15 @@ model ItineraryItem {
   createdAt     DateTime  @default(now())
 
   @@index([itineraryId])
+}
+
+model User {
+  id        String   @id @default(cuid())
+  githubId  Int      @unique
+  login     String
+  name      String?
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  itineraries Itinerary[]
 }

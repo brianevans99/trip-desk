@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import type { Request } from 'express';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { join } from 'path'
@@ -15,7 +16,8 @@ import { ItinerariesResolver } from './resolvers/itineraries.resolver'
 import { PrismaService } from "./prisma/prisma.service";
 import { createLoaders } from "./loaders/loaders";
 import { ItineraryItemResolver } from './resolvers/itinerary-item.resolver';
-
+import { AuthController } from './auth/auth.controller'
+import { AuthService } from './auth/auth.service'
 
 @Module({
   imports: [
@@ -26,14 +28,18 @@ import { ItineraryItemResolver } from './resolvers/itinerary-item.resolver';
         autoSchemaFile: join(process.cwd(), 'apps/api/schema.graphql'),
         sortSchema: true,
         graphiql: true,
-        context: () => ({ loaders: createLoaders(prismaService) })
-      })
+        context: ({ req } : { req: Request }) => ({
+          loaders: createLoaders(prismaService),
+          userId: (req.signedCookies?.session as string | undefined) ?? null
+        })
+      }),
     }),
     PrismaModule
   ],
-  controllers: [AppController],
+  controllers: [AppController,AuthController],
   providers: [
     AppService,
+    AuthService,
     DestinationsResolver,
     WikivoyageService,
     UnsplashService,
@@ -44,4 +50,6 @@ import { ItineraryItemResolver } from './resolvers/itinerary-item.resolver';
     ItineraryItemResolver
   ],
 })
-export class AppModule {}
+export class AppModule {
+
+}
