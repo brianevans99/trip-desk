@@ -8,7 +8,7 @@ A travel-planning app built to show a modern React + GraphQL stack end to end: o
 
 - **Monorepo:** Nx, npm, Node 24
 - **Web:** React, Vite, TypeScript, Tailwind CSS v4, React Router, Apollo Client
-- **API:** NestJS, code-first GraphQL (Apollo Server 5)
+- **API:** NestJS, code-first GraphQL (Apollo Server 5), Neon, Prisma, DataLoader
 - **Types:** GraphQL Code Generator (client preset), so queries are typed from the schema
 
 ## How it works
@@ -35,8 +35,21 @@ cp .env.example .env   # then add your own keys
 | `UNSPLASH_ACCESS_KEY` | Unsplash developer app (free demo tier) |
 | `GEOAPIFY_API_KEY` | Geoapify free plan |
 | `DUFFEL_ACCESS_TOKEN` | Duffel test-mode token |
+| `DATABASE_URL` | Neon Postgres connection string (use `sslmode=verify-full`) |
 
 Wikivoyage needs no key.
+
+## Database setup
+
+1. Create a free project at [Neon](https://neon.tech) and copy its connection string into `.env` as `DATABASE_URL`.
+2. Apply migrations and generate the Prisma client:
+
+```bash
+npx prisma migrate dev
+npx prisma generate
+```
+
+## Running locally
 
 Run the API and the web app in two terminals:
 
@@ -53,10 +66,10 @@ npm run codegen
 
 ## Roadmap
 
-- Flight search on the destination page
-- Saved itineraries in Postgres, with DataLoader
-- Sign-in with GitHub using OAuth 2.0 Authorization Code + PKCE
-- Docker Compose, CI on Bitbucket Pipelines, Playwright + axe accessibility tests
+- [x] Flight search on the destination page
+- [x] Saved itineraries in Postgres, with DataLoader
+- [ ] Sign-in with GitHub using OAuth 2.0 Authorization Code + PKCE
+- [ ] Docker Compose, CI on Bitbucket Pipelines, Playwright + axe accessibility tests
 
 ## Attribution
 
