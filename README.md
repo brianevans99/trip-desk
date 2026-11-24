@@ -68,7 +68,7 @@ npm run codegen
 
 - [x] Flight search on the destination page
 - [x] Saved itineraries in Postgres, with DataLoader
-- [ ] Sign-in with GitHub using OAuth 2.0 Authorization Code + PKCE
+- [x] Sign-in with GitHub using OAuth 2.0 Authorization Code + PKCE
 - [ ] Docker Compose, CI on Bitbucket Pipelines, Playwright + axe accessibility tests
 
 ## Attribution
