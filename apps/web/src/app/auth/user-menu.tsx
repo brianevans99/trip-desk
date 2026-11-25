@@ -26,7 +26,7 @@ export function UserMenu() {
   }
 
   async function signOut() {
-    await fetch('http://localhost:3000/api/auth/logout', { method: 'POST', credentials: 'include' });
+    await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
     await client.resetStore(); // clears cached data and refetches as signed out
   }
 

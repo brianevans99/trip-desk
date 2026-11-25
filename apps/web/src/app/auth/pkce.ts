@@ -20,7 +20,7 @@ export async function startGitHubSignIn() {
 
   const params = new URLSearchParams({
     client_id: import.meta.env.VITE_GITHUB_CLIENT_ID,
-    redirect_uri: 'http://localhost:4200/auth/callback',
+    redirect_uri: `${window.location.origin}/auth/callback`,
     scope: 'read:user',
     state,
     code_challenge: await challengeFrom(verifier),
