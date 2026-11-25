@@ -9,6 +9,8 @@ const ITINERARIES = graphql(`
     itineraries {
       id
       name
+      startDate
+      endDate
       createdAt
       items {
         id
@@ -30,7 +32,7 @@ const ITINERARIES = graphql(`
 
 const CREATE_ITINERARY = graphql(`
   mutation CreateItinerary($input: CreateItineraryInput!) {
-    createItinerary(input: $input) { id name }
+    createItinerary(input: $input) { id name startDate endDate }
   }
 `);
 
@@ -40,10 +42,25 @@ const REMOVE_ITEM = graphql(`
   }
 `);
 
+function formatRange(start?: string | null, end?: string | null) {
+  const fmt = (s: string) => {
+    const [y, m, d] = s.split('-').map(Number);
+    return new Date(y, m - 1, d).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+  if (start && end) return `${fmt(start)} – ${fmt(end)}`;
+  if (start) return `From ${fmt(start)}`;
+  if (end) return `Until ${fmt(end)}`;
+  return null;
+}
+
 export function ItinerariesPage() {
   const [name, setName] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [removeItem] = useMutation(REMOVE_ITEM, { refetchQueries: ['Itineraries'] });
-  const { data, loading, error } = useQuery(ITINERARIES);
+  const { data, loading, error } = useQuery(ITINERARIES, {
+    fetchPolicy: 'cache-and-network',
+  });
   const [createItinerary, { loading: saving }] = useMutation(CREATE_ITINERARY, {
     refetchQueries: ['Itineraries'],
   });
@@ -67,15 +84,21 @@ export function ItinerariesPage() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!name.trim()) return;
-    await createItinerary({ variables: { input: { name: name.trim() } } });
+    await createItinerary({
+      variables: {
+        input: { name: name.trim(), startDate: startDate || null, endDate: endDate || null },
+      },
+    });
     setName('');
+    setStartDate('');
+    setEndDate('');
   }
 
   return (
-    <main className="mx-auto max-w-3xl p-6">
+    <section className="mx-auto max-w-3xl">
       <h1 className="text-3xl font-bold mb-6">My itineraries</h1>
 
-      <form onSubmit={onSubmit} className="flex gap-2 mb-8">
+      <form onSubmit={onSubmit} className="flex flex-wrap gap-2 mb-8">
         <label htmlFor="itinerary-name" className="sr-only">Itinerary name</label>
         <input
           id="itinerary-name"
@@ -83,6 +106,23 @@ export function ItinerariesPage() {
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g. Lisbon weekend"
           className="flex-1 rounded border px-3 py-2"
+        />
+        <label htmlFor="itinerary-start" className="sr-only">Start date</label>
+        <input
+          id="itinerary-start"
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          className="rounded border px-3 py-2"
+        />
+        <label htmlFor="itinerary-end" className="sr-only">End date</label>
+        <input
+          id="itinerary-end"
+          type="date"
+          value={endDate}
+          min={startDate || undefined}
+          onChange={(e) => setEndDate(e.target.value)}
+          className="rounded border px-3 py-2"
         />
         <button type="submit" disabled={saving} className="rounded bg-brand-600 px-4 py-2 text-white disabled:opacity-50">
           {saving ? 'Creating…' : 'Create'}
@@ -93,6 +133,9 @@ export function ItinerariesPage() {
         {data?.itineraries.map((it) => (
           <li key={it.id} className="rounded border p-4">
             <h2 className="text-xl font-semibold">{it.name}</h2>
+            {formatRange(it.startDate, it.endDate) && (
+              <p className="text-sm text-gray-600">{formatRange(it.startDate, it.endDate)}</p>
+            )}
             <div className="text-sm text-gray-500">
               {it.items.length === 0 ? (
                 <p className="text-sm text-gray-500">No destinations yet.</p>
@@ -114,7 +157,7 @@ export function ItinerariesPage() {
                         type="button"
                         onClick={() => removeItem({ variables: { id: item.id } })}
                         aria-label={`Remove ${item.destination?.name ?? 'destination'} from ${it.name}`}
-                        className="mt-1 text-sm text-red-700 underline"
+                        className="mt-1 text-sm text-red-700 underline cursor-pointer"
                       >
                         Remove
                       </button>
@@ -126,6 +169,6 @@ export function ItinerariesPage() {
           </li>
         ))}
       </ul>
-    </main>
+    </section>
   );
 }

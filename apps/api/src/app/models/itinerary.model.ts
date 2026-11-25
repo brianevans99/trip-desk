@@ -13,6 +13,8 @@ export class ItineraryItem {
 export class Itinerary {
   @Field(() => ID) id!: string;
   @Field() name!: string;
+  @Field(() => String, { nullable: true }) startDate?: string | null;
+  @Field(() => String, { nullable: true }) endDate?: string | null;
   @Field() createdAt!: Date;
   @Field(() => [ItineraryItem]) items!: ItineraryItem[];
 }

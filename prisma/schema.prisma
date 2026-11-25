@@ -11,6 +11,8 @@ datasource db {
 model Itinerary {
   id        String          @id @default(cuid())
   name      String
+  startDate DateTime?       @db.Date
+  endDate   DateTime?       @db.Date
   ownerId   String
   owner     User            @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   createdAt DateTime        @default(now())

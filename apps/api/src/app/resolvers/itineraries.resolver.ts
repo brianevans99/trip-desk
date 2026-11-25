@@ -4,6 +4,8 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Itinerary, ItineraryItem } from '../models/itinerary.model';
 import { AddItemInput, CreateItineraryInput } from '../inputs/itinerary.inputs';
 import type { Loaders } from "../loaders/loaders";
+import {formatDateOnly, parseDateOnly} from "../utils/dates";
+import {GraphQLError} from "graphql";
 
 function requireUser(userId: string | null) {
   if (!userId) throw new UnauthorizedException('Sign in to manage itineraries');
@@ -24,9 +26,25 @@ export class ItinerariesResolver {
 
   @Mutation(() => Itinerary)
   createItinerary(@Args('input') input: CreateItineraryInput, @Context('userId') userId: string | null) {
+    const ownerId = requireUser(userId);
+    const startDate = parseDateOnly(input.startDate, 'startDate');
+    const endDate = parseDateOnly(input.endDate, 'endDate');
+    if (startDate && endDate && endDate < startDate) {
+      throw new GraphQLError('endDate must be on or after startDate', { extensions: { code: 'BAD_USER_INPUT' } });
+    }
     return this.prisma.itinerary.create({
-      data: { name: input.name, ownerId: requireUser(userId) },
+      data: { name: input.name, startDate, endDate, ownerId },
     });
+  }
+
+  @ResolveField(() => String, { nullable: true })
+  startDate(@Parent() it: { startDate: Date | null }) {
+    return formatDateOnly(it.startDate);
+  }
+
+  @ResolveField(() => String, { nullable: true })
+  endDate(@Parent() it: { endDate: Date | null }) {
+    return formatDateOnly(it.endDate);
   }
 
   @Mutation(() => ItineraryItem)
