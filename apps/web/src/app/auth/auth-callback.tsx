@@ -25,7 +25,7 @@ export function AuthCallback() {
       return;
     }
 
-    fetch('http://localhost:3000/api/auth/github', {
+    fetch('/api/auth/github', {
       method: 'POST',
       credentials: 'include', // lets the browser accept the session cookie
       headers: { 'Content-Type': 'application/json' },
