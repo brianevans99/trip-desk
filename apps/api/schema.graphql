@@ -17,7 +17,9 @@ type Attribution {
 }
 
 input CreateItineraryInput {
+  endDate: String
   name: String!
+  startDate: String
 }
 
 """
@@ -56,9 +58,11 @@ type FlightSegment {
 
 type Itinerary {
   createdAt: DateTime!
+  endDate: String
   id: ID!
   items: [ItineraryItem!]!
   name: String!
+  startDate: String
 }
 
 type ItineraryItem {

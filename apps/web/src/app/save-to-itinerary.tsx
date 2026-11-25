@@ -21,9 +21,7 @@ export function SaveToItinerary({ destinationId, destinationName }: Props) {
   const { data, loading } = useQuery(ITINERARY_OPTIONS);
   const [itineraryId, setItineraryId] = useState('');
   const [message, setMessage] = useState('');
-  const [addItem, { loading: saving }] = useMutation(ADD_ITEM, {
-    refetchQueries: ['Itineraries'],
-  });
+  const [addItem, { loading: saving }] = useMutation(ADD_ITEM);
 
   const itineraries = data?.itineraries ?? [];
 
@@ -62,7 +60,7 @@ export function SaveToItinerary({ destinationId, destinationName }: Props) {
       <button
         type="submit"
         disabled={!itineraryId || saving}
-        className="rounded bg-brand-600 px-4 py-2 text-white disabled:opacity-50"
+        className="rounded bg-brand-600 px-4 py-2 text-white hover:bg-brand-700 focus:ring-4 focus:outline-none focus:ring-ink disabled:opacity-50 cursor-pointer"
       >
         {saving ? 'Saving…' : 'Save'}
       </button>
