@@ -1,0 +1,31 @@
+image: node:24
+
+clone:
+  depth: full   # nx affected needs history to compare against
+
+definitions:
+  caches:
+    npm: ~/.npm
+
+pipelines:
+  pull-requests:
+    '**':
+      - step:
+          name: Lint, test, build (affected)
+          caches:
+            - npm
+          script:
+            - npm ci
+            - npx prisma generate
+            - git fetch origin $BITBUCKET_PR_DESTINATION_BRANCH
+            - npx nx affected -t lint test build --base=origin/$BITBUCKET_PR_DESTINATION_BRANCH --head=HEAD
+  branches:
+    main:
+      - step:
+          name: Lint, test, build (all)
+          caches:
+            - npm
+          script:
+            - npm ci
+            - npx prisma generate
+            - npx nx run-many -t lint test build
