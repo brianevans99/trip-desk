@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client/react';
 import { graphql } from '../gql';
 import { Link } from 'react-router-dom';
+import { isUnauthenticated } from "./errors";
 
 const ITINERARIES = graphql(`
   query Itineraries {
@@ -49,10 +50,16 @@ export function ItinerariesPage() {
 
   if (loading) return <p className="p-6">Loading…</p>;
   if (error) {
+    if (isUnauthenticated(error)) {
+      return (
+        <section className="text-sm text-gray-500">
+          Sign in to see your itineraries.
+        </section>
+      );
+    }
     return (
-      <section className="mx-auto max-w-3xl p-6">
-        <h1 className="text-3xl font-bold">My itineraries</h1>
-        <p className="mt-4">Sign in to see your itineraries.</p>
+      <section role="alert" className="rounded-lg bg-red-50 p-4 text-sm text-red-800">
+        Something went wrong loading your itineraries. Please try again.
       </section>
     );
   }
