@@ -1,26 +1,34 @@
-import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { MockedProvider } from '@apollo/client/testing/react';
 
 import App from './app';
 
-describe('App', () => {
-  it('should render successfully', () => {
-    const { baseElement } = render(
-      <BrowserRouter>
+function renderApp(route = '/') {
+  return render(
+    <MockedProvider mocks={[]}>
+      <MemoryRouter initialEntries={[route]}>
         <App />
-      </BrowserRouter>,
-    );
+      </MemoryRouter>
+    </MockedProvider>,
+  );
+}
+
+describe('App', () => {
+  it('renders successfully', () => {
+    const { baseElement } = renderApp();
     expect(baseElement).toBeTruthy();
   });
 
-  it('should have a greeting as the title', () => {
-    const { getAllByText } = render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>,
-    );
-    expect(
-      getAllByText(new RegExp('Welcome @trip-desk/web', 'gi')).length > 0,
-    ).toBeTruthy();
+  it('shows the navbar with the logo and main links', () => {
+    renderApp();
+    expect(screen.getByRole('link', { name: 'Trip Desk' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Destinations' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'Itineraries' })).toBeTruthy();
+  });
+
+  it('renders a main landmark', () => {
+    renderApp();
+    expect(screen.getByRole('main')).toBeTruthy();
   });
 });
