@@ -40,7 +40,7 @@ export function FlightSearch({ defaultDestination = '' }: Props) {
         <label className="text-sm">Date
           <input className={input} type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
         </label>
-        <button type="submit" disabled={loading} className="rounded-lg bg-brand-600 p-2 font-medium text-white hover:bg-brand-700 disabled:opacity-50">
+      <button type="submit" disabled={loading} className="rounded-lg bg-brand-600 p-2 font-medium text-white hover:bg-brand-700 focus:ring-4 focus:outline-none focus:ring-ink disabled:opacity-50 cursor-pointer">
           {loading ? 'Searching…' : 'Search'}
         </button>
       </form>
