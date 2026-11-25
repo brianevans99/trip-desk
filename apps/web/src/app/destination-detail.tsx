@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { graphql } from '../gql';
 import { FlightSearch } from './flight-search'
 import { SaveToItinerary } from "./save-to-itinerary";
+import { ErrorAlert } from "./error-alert";
 
 const DESTINATION = graphql(`
   query Destination($id: ID!) {
@@ -19,7 +20,7 @@ export function DestinationDetail() {
   const { id = '' } = useParams();
   const { data, loading, error } = useQuery(DESTINATION, { variables: { id } });
   if (loading) return <p>Loading…</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (error) return <ErrorAlert message="We couldn't load this destination. Please try again." />;
   const d = data?.destination;
   if (!d) return <p>Destination not found. <Link to="/" className="underline">Back to all destinations</Link></p>;
 

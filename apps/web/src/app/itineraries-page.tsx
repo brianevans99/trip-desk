@@ -3,6 +3,7 @@ import { useMutation, useQuery } from '@apollo/client/react';
 import { graphql } from '../gql';
 import { Link } from 'react-router-dom';
 import { isUnauthenticated } from "./errors";
+import { ErrorAlert } from "./error-alert";
 
 const ITINERARIES = graphql(`
   query Itineraries {
@@ -68,17 +69,9 @@ export function ItinerariesPage() {
   if (loading) return <p className="p-6">Loading…</p>;
   if (error) {
     if (isUnauthenticated(error)) {
-      return (
-        <section className="text-sm text-gray-500">
-          Sign in to see your itineraries.
-        </section>
-      );
+      return ( <ErrorAlert message="Sign in to see your itineraries." /> );
     }
-    return (
-      <section role="alert" className="rounded-lg bg-red-50 p-4 text-sm text-red-800">
-        Something went wrong loading your itineraries. Please try again.
-      </section>
-    );
+    return ( <ErrorAlert message="Something went wrong loading your itineraries. Please try again." /> );
   }
 
   async function onSubmit(e: React.FormEvent) {

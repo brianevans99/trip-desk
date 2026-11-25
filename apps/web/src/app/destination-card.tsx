@@ -22,7 +22,6 @@ export function DestinationCard({ d }: { d: Destination }) {
       </figure>
     )}
     <div className="p-4">
-      <h2 className="text-xl font-semibold text-ink">{d.name}, {d.country}</h2>
       <p className="mt-2 line-clamp-4 text-sm text-gray-700">{d.summary}</p>
       {d.summaryAttribution && (
         <p className="mt-2 text-xs text-gray-500">
