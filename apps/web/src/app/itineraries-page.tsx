@@ -3,6 +3,8 @@ import { useMutation, useQuery } from '@apollo/client/react';
 import { graphql } from '../gql';
 import { Link } from 'react-router-dom';
 import { isUnauthenticated } from "./errors";
+import { ErrorAlert } from "./error-alert";
+import { ItinerariesSkeleton } from "./skeletons";
 
 const ITINERARIES = graphql(`
   query Itineraries {
@@ -65,20 +67,12 @@ export function ItinerariesPage() {
     refetchQueries: ['Itineraries'],
   });
 
-  if (loading) return <p className="p-6">Loading…</p>;
+  if (loading) return <ItinerariesSkeleton />;
   if (error) {
     if (isUnauthenticated(error)) {
-      return (
-        <section className="text-sm text-gray-500">
-          Sign in to see your itineraries.
-        </section>
-      );
+      return ( <ErrorAlert message="Sign in to see your itineraries." /> );
     }
-    return (
-      <section role="alert" className="rounded-lg bg-red-50 p-4 text-sm text-red-800">
-        Something went wrong loading your itineraries. Please try again.
-      </section>
-    );
+    return ( <ErrorAlert message="Something went wrong loading your itineraries. Please try again." /> );
   }
 
   async function onSubmit(e: React.FormEvent) {
@@ -124,14 +118,14 @@ export function ItinerariesPage() {
           onChange={(e) => setEndDate(e.target.value)}
           className="rounded border px-3 py-2"
         />
-        <button type="submit" disabled={saving} className="rounded bg-brand-600 px-4 py-2 text-white disabled:opacity-50">
+        <button type="submit" disabled={saving} className="rounded bg-brand-600 px-4 py-2 text-white disabled:opacity-50 cursor-pointer">
           {saving ? 'Creating…' : 'Create'}
         </button>
       </form>
 
       <ul className="space-y-4">
         {data?.itineraries.map((it) => (
-          <li key={it.id} className="rounded border p-4">
+          <li key={it.id} className="rounded border border-gray-200 p-4">
             <h2 className="text-xl font-semibold">{it.name}</h2>
             {formatRange(it.startDate, it.endDate) && (
               <p className="text-sm text-gray-600">{formatRange(it.startDate, it.endDate)}</p>
