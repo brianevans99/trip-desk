@@ -25,13 +25,12 @@ export function DestinationDetail() {
 
   return (
     <article className="mt-6">
-      <Link to="/" className="text-sm text-brand-700 underline">← All destinations</Link>
       <h2 className="mt-2 text-2xl font-semibold text-ink">{d.name}, {d.country}</h2>
 
       <div className="mt-4 grid gap-4 sm:grid-cols-3">
-        {d.photos.map((p) => (
-          <figure key={p.url}>
-            <img src={p.url} alt={p.alt ?? ''} className="h-48 w-full rounded-lg object-cover" />
+        {d.photos.map((p, i) => (
+          <figure key={p.url} className={i > 0 ? 'hidden sm:block' : undefined}>
+            <img loading={"lazy"} src={p.url} alt={p.alt ?? ''} className="h-48 w-full rounded-lg object-cover" />
             <figcaption className="mt-1 text-xs text-gray-500">
               Photo by <a href={p.attribution.url ?? undefined} className="underline" target="_blank" rel="noreferrer">{p.attribution.author}</a> on Unsplash
             </figcaption>

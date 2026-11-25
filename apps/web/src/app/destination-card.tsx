@@ -7,13 +7,15 @@ export function DestinationCard({ d }: { d: Destination }) {
   const photo = d.photos[0];
   return (
     <article className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
-    <h2 className="text-xl font-semibold text-ink">
+    <h2 className="text-xl font-semibold text-ink px-4 py-2">
       <Link to={`/destinations/${d.id}`} className="hover:underline">{d.name}, {d.country}</Link>
     </h2>
     {photo && (
       <figure>
         {/* An empty `alt` is the accessible fallback, because screen readers skip the image instead of reading out its file name */}
-        <img src={photo.url} alt={photo.alt ?? ''} className="h-48 w-full object-cover" />
+        <Link to={`/destinations/${d.id}`} className="hover:underline">
+          <img src={photo.url} alt={photo.alt ?? ''} className="h-48 w-full object-cover" />
+        </Link>
         <figcaption className="px-4 pt-2 text-xs text-gray-500">
           Photo by <a href={photo.attribution.url ?? undefined} className="underline" target="_blank" rel="noreferrer">{photo.attribution.author}</a> on Unsplash
         </figcaption>
