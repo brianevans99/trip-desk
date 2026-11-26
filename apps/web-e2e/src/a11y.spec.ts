@@ -13,7 +13,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 for (const r of routes) {
-  test.describe(r.name, () => {
+  test.describe(`${r.name}`, () => {
     test.beforeEach(async ({ page }) => {
       await page.goto(r.path);
       // Wait until the skeleton (role="status") is gone, so we test the real page
