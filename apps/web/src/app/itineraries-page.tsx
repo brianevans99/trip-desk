@@ -54,6 +54,14 @@ function formatRange(start?: string | null, end?: string | null) {
   if (end) return `Until ${fmt(end)}`;
   return null;
 }
+function PageShell({ children }: { children: React.ReactNode }) {
+  return (
+    <section className="mx-auto max-w-3xl">
+      <h1 className="text-3xl font-bold mb-6">My itineraries</h1>
+      {children}
+    </section>
+  );
+}
 
 export function ItinerariesPage() {
   const [name, setName] = useState('');
@@ -67,12 +75,19 @@ export function ItinerariesPage() {
     refetchQueries: ['Itineraries'],
   });
 
-  if (loading) return <ItinerariesSkeleton />;
+  if (loading) return <PageShell><ItinerariesSkeleton /></PageShell>;
   if (error) {
-    if (isUnauthenticated(error)) {
-      return ( <ErrorAlert message="Sign in to see your itineraries." /> );
-    }
-    return ( <ErrorAlert message="Something went wrong loading your itineraries. Please try again." /> );
+    return (
+      <PageShell>
+        <ErrorAlert
+          message={
+            isUnauthenticated(error)
+              ? 'Sign in to see your itineraries.'
+              : 'Something went wrong loading your itineraries. Please try again.'
+          }
+        />
+      </PageShell>
+    );
   }
 
   async function onSubmit(e: React.FormEvent) {
@@ -89,9 +104,7 @@ export function ItinerariesPage() {
   }
 
   return (
-    <section className="mx-auto max-w-3xl">
-      <h1 className="text-3xl font-bold mb-6">My itineraries</h1>
-
+    <PageShell>
       <form onSubmit={onSubmit} className="flex flex-wrap gap-2 mb-8">
         <label htmlFor="itinerary-name" className="sr-only">Itinerary name</label>
         <input
@@ -163,6 +176,6 @@ export function ItinerariesPage() {
           </li>
         ))}
       </ul>
-    </section>
+    </PageShell>
   );
 }

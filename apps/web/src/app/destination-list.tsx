@@ -16,11 +16,18 @@ const DESTINATIONS = graphql(`
 
 export function DestinationList() {
   const { data, loading, error } = useQuery(DESTINATIONS);
-  if (loading) return <CardGridSkeleton />;
-  if (error) return <ErrorAlert message="We couldn't load destinations. Please try again." />;
   return (
-    <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {data?.destinations.map((d) => <DestinationCard key={d.id} d={d} />)}
-    </div>
+    <section>
+      <h1 className="text-3xl font-bold text-ink">Destinations</h1>
+      {loading ? (
+        <CardGridSkeleton />
+      ) : error ? (
+        <ErrorAlert message="We couldn't load destinations. Please try again." />
+      ) : (
+        <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {data?.destinations.map((d) => <DestinationCard key={d.id} d={d} />)}
+        </div>
+      )}
+    </section>
   );
 }
