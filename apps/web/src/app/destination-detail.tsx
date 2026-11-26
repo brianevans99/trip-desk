@@ -27,7 +27,7 @@ export function DestinationDetail() {
 
   return (
     <article className="mt-6">
-      <h2 className="mt-2 text-2xl font-semibold text-ink">{d.name}, {d.country}</h2>
+      <h1 className="mt-2 text-2xl font-semibold text-ink">{d.name}, {d.country}</h1>
 
       <div className="mt-4 grid gap-4 sm:grid-cols-3">
         {d.photos.map((p, i) => (
@@ -48,7 +48,7 @@ export function DestinationDetail() {
         </p>
       )}
 
-      <h3 className="mt-8 text-lg font-semibold text-ink">Things to see</h3>
+      <h2 className="mt-8 text-lg font-semibold text-ink">Things to see</h2>
       <ul className="mt-2 divide-y divide-gray-200">
         {(d.places ?? []).map((p) => (
           <li key={p.id} className="py-2">
