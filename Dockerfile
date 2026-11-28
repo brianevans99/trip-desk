@@ -7,6 +7,8 @@ ENV NX_DAEMON=false NX_NO_CLOUD=true
 COPY . .
 RUN npm ci
 RUN npx prisma generate
+ARG VITE_GITHUB_CLIENT_ID
+ENV VITE_GITHUB_CLIENT_ID=$VITE_GITHUB_CLIENT_ID
 RUN npx nx run-many -t build -p web api
 RUN npm prune --omit=dev
 
