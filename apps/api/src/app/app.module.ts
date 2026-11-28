@@ -35,7 +35,7 @@ import { MeResolver } from './resolvers/me.resolver'
       driver: ApolloDriver,
       inject: [PrismaService],
       useFactory: (prismaService: PrismaService) => ({
-        autoSchemaFile: join(process.cwd(), 'apps/api/schema.graphql'),
+        autoSchemaFile: process.env.NODE_ENV === 'production' ? true : join(process.cwd(), 'apps/api/schema.graphql'),
         sortSchema: true,
         graphiql: true,
         context: ({ req } : { req: Request }) => ({
