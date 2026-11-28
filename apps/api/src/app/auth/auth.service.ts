@@ -1,6 +1,18 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
+interface GitHubTokenResponse {
+  access_token?: string;
+  error?: string;
+}
+
+interface GitHubUser {
+  id: number;
+  login: string;
+  name: string | null;
+  avatar_url: string;
+}
+
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService) {}
@@ -15,10 +27,10 @@ export class AuthService {
         client_secret: process.env.GITHUB_CLIENT_SECRET,
         code,
         code_verifier: codeVerifier,
-        redirect_uri: 'http://localhost:4200/auth/callback',
+        redirect_uri: `${process.env.WEB_ORIGIN}/auth/callback`,
       }),
     });
-    const token = await tokenRes.json();
+    const token = (await tokenRes.json()) as GitHubTokenResponse;
     if (!token.access_token) throw new UnauthorizedException(token.error ?? 'GitHub sign-in failed');
 
     // 2. Ask GitHub who this is
@@ -26,7 +38,7 @@ export class AuthService {
       headers: { Authorization: `Bearer ${token.access_token}`, Accept: 'application/vnd.github+json' },
     });
     if (!ghRes.ok) throw new UnauthorizedException('Could not read GitHub profile');
-    const gh = await ghRes.json();
+    const gh = (await ghRes.json()) as GitHubUser;
 
     // 3. Create or update our User row
     return this.prisma.user.upsert({
